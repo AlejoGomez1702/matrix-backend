@@ -7,7 +7,7 @@ export class CreateUserDto {
     email: string;
 
     @IsString()
-    @MinLength(6)
+    @MinLength(8)
     @MaxLength(50)
     @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
         message: 'The password must have an Uppercase, lowercase letter, and a number'
@@ -36,12 +36,4 @@ export class CreateUserDto {
     @IsString()
     @IsNotEmpty()
     sponsor: string;
-
-    // @IsBoolean()
-    // @IsNotEmpty()
-    // termsAccepted: boolean;
-
-    // @IsBoolean()
-    // @IsNotEmpty()
-    // dataUsageAuthorization: boolean;
 }
