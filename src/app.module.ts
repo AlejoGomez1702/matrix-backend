@@ -5,6 +5,8 @@ import { SeedModule } from './seed/seed.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from './common/common.module';
+import { UsersModule } from './users/users.module';
+import { SponsorsModule } from './sponsors/sponsors.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { CommonModule } from './common/common.module';
     SeedModule,
     AuthModule,
     CommonModule,
+    UsersModule,
+    SponsorsModule,
   ]
 })
 export class AppModule {}

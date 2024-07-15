@@ -35,11 +35,10 @@ export class User {
     @Column('text')
     sponsor: string; // Agregado
 
-    // @Column('bool')
-    // termsAccepted: boolean; // Agregado
-
-    // @Column('bool')
-    // dataUsageAuthorization: boolean; // Agregado
+    @Column('text', {
+        default: 'registered'
+    })
+    state: string;
 
     @Column('bool', {
         default: true
