@@ -36,7 +36,7 @@ export class User {
     sponsor: string; // Agregado
 
     @Column('text', {
-        default: 'registered'
+        default: 'Registrado'
     })
     state: string;
 
