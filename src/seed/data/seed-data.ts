@@ -13,9 +13,15 @@ interface SeedUser {
     dataUsageAuthorization: boolean;
     isActive: boolean;
     roles: string[];
+    state: number;
+}
+
+interface SeedState {
+    name: string;
 }
 
 interface SeedData {
+    states: SeedState[];
     users: SeedUser[];
 }
 
@@ -34,8 +40,25 @@ export const initialData: SeedData = {
             termsAccepted: true,
             dataUsageAuthorization: true,
             isActive: true,
-            roles: ['admin']
+            roles: ['admin'],
+            state: 1
         },
-        // Puedes agregar más usuarios aquí siguiendo el mismo formato
+    ],
+    states: [
+        {
+            name: 'Registrado'
+        },
+        {
+            name: 'Patrocinado'
+        },
+        {
+            name: 'Miembro 1'
+        },
+        {
+            name: 'Miembro 2'
+        },
+        {
+            name: 'Miembro 3'
+        }
     ]
 };

@@ -1,5 +1,6 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { ResetToken } from "./reset-token.entity";
+import { State } from "src/states/entities/state.entity";
 
 @Entity('users')
 export class User {
@@ -19,26 +20,32 @@ export class User {
     fullName: string;
 
     @Column('text')
-    document: string; // Agregado
+    document: string; 
 
     @Column('text')
-    country: string; // Agregado
+    country: string; 
 
     @Column('text')
-    phoneNumber: string; // Agregado
+    phoneNumber: string; 
 
     @Column('text', {
         nullable: true
     })
-    phoneNumber2: string; // Agregado, opcional
+    phoneNumber2: string;
 
     @Column('text')
-    sponsor: string; // Agregado
+    sponsor: string; 
 
-    @Column('text', {
-        default: 'Registrado'
-    })
-    state: string;
+    // @Column('text', {
+    //     default: 'Registrado'
+    // })
+    // state: string;
+
+    @ManyToOne(
+        () => State,
+        state => state.id
+    )
+    state: number;
 
     @Column('bool', {
         default: true
