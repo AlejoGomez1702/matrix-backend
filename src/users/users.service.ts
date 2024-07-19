@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/entities/user.entity';
 import { ILike, Repository } from 'typeorm';
+import { QueryGetTotalDto } from './dto/query-get-total.dto';
 
 @Injectable()
 export class UsersService {
@@ -19,13 +20,25 @@ export class UsersService {
 
   async findAll() {
     
-    const [results, total] = await this.usersRepository
-                                      .createQueryBuilder("user")
-                                      .where("user.isActive = :isActive", { isActive: true })
-                                      .andWhere("user.roles @> :roles", { roles: ['user'] }) // '@>' es el operador de contención de array en PostgreSQL
-                                      .getManyAndCount();
+    const [results, total] = await this.usersRepository.createQueryBuilder("user")
+                                        .leftJoinAndSelect("user.state", "state") // Asegúrate de que "state" es el nombre correcto de la propiedad en tu entidad User que se relaciona con State
+                                        .where("user.isActive = :isActive", { isActive: true })
+                                        .andWhere("user.roles @> :roles", { roles: ['user'] }) // '@>' es el operador de contención de array en PostgreSQL
+                                        .getManyAndCount();
 
     return { results, total };
+  }
+
+  async findAllRegisters(queryGetTotalDto: QueryGetTotalDto) {
+    const total = await this.usersRepository
+                        .createQueryBuilder("user")
+                        .innerJoinAndSelect("user.state", "state") // Realiza un join con la tabla de estados
+                        .where("user.isActive = :isActive", { isActive: true })
+                        .andWhere("user.roles @> :roles", { roles: ['user'] })
+                        .andWhere("state.name = :stateName", { stateName: queryGetTotalDto.state }) // Filtra por el nombre del estado
+                        .getCount();
+  
+    return total;
   }
 
   findOne(id: number) {
