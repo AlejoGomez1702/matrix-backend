@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Auth } from 'src/auth/decorators';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { QueryGetTotalDto } from './dto/query-get-total.dto';
+import { ChangeStateDto } from './dto/change-state.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -26,6 +27,11 @@ export class UsersController {
   @Get('total')
   findAllRegisters(@Query() queryGetTotalDto: QueryGetTotalDto) {
     return this.usersService.findAllRegisters( queryGetTotalDto );
+  }
+
+  @Put('change-state/:id')
+  changeState( @Param('id') id: string, @Body() changeStateDto: ChangeStateDto ) {
+    return this.usersService.changeState( +id, changeStateDto );
   }
 
   @Get(':id')

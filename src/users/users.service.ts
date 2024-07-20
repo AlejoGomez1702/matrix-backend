@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/entities/user.entity';
 import { ILike, Repository } from 'typeorm';
 import { QueryGetTotalDto } from './dto/query-get-total.dto';
+import { ChangeStateDto } from './dto/change-state.dto';
 
 @Injectable()
 export class UsersService {
@@ -39,6 +40,21 @@ export class UsersService {
                         .getCount();
   
     return total;
+  }
+
+  async changeState(id: number, changeStateDto: ChangeStateDto) {
+    // Buscar el usuario por su ID
+    const user = await this.usersRepository.findOne({
+      where: { id: (id+"") },
+      relations: ['state']
+    });
+
+    // Verificar si el usuario existe
+    if (!user) 
+      throw new NotFoundException(`User with ID ${id} not found`);
+
+    user.state = changeStateDto.stateId;
+    await this.usersRepository.save(user);
   }
 
   findOne(id: number) {
