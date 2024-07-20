@@ -33,8 +33,8 @@ export class User {
     })
     phoneNumber2: string;
 
-    @Column('text')
-    sponsor: string; 
+    // @Column('text')
+    // sponsor: string; 
 
     // @Column('text', {
     //     default: 'Registrado'
@@ -63,6 +63,18 @@ export class User {
         resetToken => resetToken.user
     )
     resetToken: ResetToken;
+
+    // Clave foránea para el sponsor. Un usuario puede tener un sponsor.
+    @Column({ nullable: true })
+    sponsorId: string;
+
+    // Relación muchos a uno para indicar que un usuario puede tener un sponsor.
+    @ManyToOne(() => User, user => user.sponsoredUsers)
+    sponsor: User;
+
+    // Relación uno a muchos para indicar que un usuario (como sponsor) puede tener muchos usuarios.
+    @OneToMany(() => User, user => user.sponsor)
+    sponsoredUsers: User[];
 
     @CreateDateColumn({
         type: 'timestamp', 

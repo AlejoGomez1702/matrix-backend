@@ -34,6 +34,5 @@ export class CreateUserDto {
     phoneNumber2: string;
 
     @IsString()
-    @IsNotEmpty()
     sponsor: string;
 }

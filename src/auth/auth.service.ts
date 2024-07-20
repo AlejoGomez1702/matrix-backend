@@ -31,10 +31,14 @@ export class AuthService {
   async create( createUserDto: CreateUserDto ) {
 
     try {
-      const { password, ...userData } = createUserDto;
+      const { password, sponsor = '', ...userData } = createUserDto;
+
+      const sponsorUser = await this.userRepository.findOne({ where: { document: sponsor } });
+
 
       const user = this.userRepository.create({
         ...userData,
+        sponsor: sponsorUser ?? null,
         password: bcrypt.hashSync( password, 10 ),
         state: 6
       });
@@ -44,7 +48,7 @@ export class AuthService {
 
       return {
         ...user,
-        token: this.getJwtToken({ id: user.id })
+        // token: this.getJwtToken({ id: user.id })
       };
       
     } catch (error) {

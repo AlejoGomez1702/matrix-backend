@@ -23,6 +23,7 @@ export class UsersService {
     
     const [results, total] = await this.usersRepository.createQueryBuilder("user")
                                         .leftJoinAndSelect("user.state", "state") // Asegúrate de que "state" es el nombre correcto de la propiedad en tu entidad User que se relaciona con State
+                                        .leftJoinAndSelect("user.sponsor", "sponsor")
                                         .where("user.isActive = :isActive", { isActive: true })
                                         .andWhere("user.roles @> :roles", { roles: ['user'] }) // '@>' es el operador de contención de array en PostgreSQL
                                         .getManyAndCount();
@@ -42,6 +43,16 @@ export class UsersService {
     return total;
   }
 
+  async findAllBySponsor(id: number) {
+
+    const [results, total] = await this.usersRepository.findAndCount({
+      where: { sponsor: { id: (id + "") } },
+      relations: ['state', 'sponsor']
+    });
+
+    return { results, total };
+  }
+
   async changeState(id: number, changeStateDto: ChangeStateDto) {
     // Buscar el usuario por su ID
     const user = await this.usersRepository.findOne({
@@ -57,8 +68,17 @@ export class UsersService {
     await this.usersRepository.save(user);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+
+    const user = await this.usersRepository.findOne({
+      where: { id: (id+"") },
+      relations: ['state', 'sponsor']
+    }); 
+
+    if(!user)
+      throw new NotFoundException(`User with ID ${id} not found`);
+
+    return { user };
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

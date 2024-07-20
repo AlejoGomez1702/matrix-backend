@@ -29,6 +29,11 @@ export class UsersController {
     return this.usersService.findAllRegisters( queryGetTotalDto );
   }
 
+  @Get('by-sponsor/:id')
+  findAllBySponsor( @Param('id') id: string ) {
+    return this.usersService.findAllBySponsor( +id );
+  }
+
   @Put('change-state/:id')
   changeState( @Param('id') id: string, @Body() changeStateDto: ChangeStateDto ) {
     return this.usersService.changeState( +id, changeStateDto );

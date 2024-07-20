@@ -19,13 +19,13 @@ export class SeedService {
 
     await this.deleteTables();
     const states = await this.insertStates();
-    const registerId = +states.find( state => state.name === 'Registrado' ).id;
+    // const registerId = +states.find( state => state.name === 'Registrado' ).id;
 
-    await this.insertUsers( registerId );
+    // await this.insertUsers( registerId );
 
-    return {
-      message: 'Seeds executed successfully!'
-    };
+    // return {
+    //   message: 'Seeds executed successfully!'
+    // };
   }
 
   private async insertStates() {
@@ -43,17 +43,17 @@ export class SeedService {
 
   private async insertUsers( registerId: number ) {
 
-    const seedUsers = initialData.users;
+    // const seedUsers = initialData.users;
 
-    const users: User[] = [];
+    // const users: User[] = [];
 
-    seedUsers.forEach( seedUser => {
+    // seedUsers.forEach( seedUser => {
 
-      seedUser.state = registerId;
-      users.push( this.userRepository.create( seedUser ) );
-    })
+    //   seedUser.state = registerId;
+    //   users.push( this.userRepository.create( seedUser ) );
+    // })
 
-    await this.userRepository.save( users );
+    // await this.userRepository.save( users );
   }
 
   private async deleteTables() {
