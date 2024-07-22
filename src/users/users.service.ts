@@ -32,14 +32,31 @@ export class UsersService {
   }
 
   async findAllRegisters(queryGetTotalDto: QueryGetTotalDto) {
-    const total = await this.usersRepository
+
+    const { state } = queryGetTotalDto;
+
+    let total = 0;
+
+    if( state == 'Registrado' ) {
+      total = await this.usersRepository
+                        .createQueryBuilder("user")
+                        // .innerJoinAndSelect("user.state", "state") // Realiza un join con la tabla de estados
+                        .where("user.isActive = :isActive", { isActive: true })
+                        .andWhere("user.roles @> :roles", { roles: ['user'] })
+                        // .andWhere("state.name = :stateName", { stateName: queryGetTotalDto.state }) // Filtra por el nombre del estado
+                        .getCount();
+    
+      return total;
+    }
+
+    total = await this.usersRepository
                         .createQueryBuilder("user")
                         .innerJoinAndSelect("user.state", "state") // Realiza un join con la tabla de estados
                         .where("user.isActive = :isActive", { isActive: true })
                         .andWhere("user.roles @> :roles", { roles: ['user'] })
                         .andWhere("state.name = :stateName", { stateName: queryGetTotalDto.state }) // Filtra por el nombre del estado
                         .getCount();
-  
+    
     return total;
   }
 
