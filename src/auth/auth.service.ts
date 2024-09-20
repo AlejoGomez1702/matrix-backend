@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { BadRequestException, Injectable, InternalServerErrorException, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -31,8 +32,10 @@ export class AuthService {
   async create( createUserDto: CreateUserDto ) {
 
     try {
-      const { password, sponsor = '', ...userData } = createUserDto;
-
+      const { password, document, sponsor = '', ...userData } = createUserDto;
+      if (password !== document) {
+        throw new Error('Campo password debe ser igual al ducumento');
+      }
       const sponsorUser = await this.userRepository.findOne({ where: { document: sponsor } });
 
 
@@ -40,7 +43,8 @@ export class AuthService {
         ...userData,
         sponsor: sponsorUser ?? null,
         password: bcrypt.hashSync( password, 10 ),
-        state: 6
+        state: 1,
+        document
       });
 
       await this.userRepository.save( user );

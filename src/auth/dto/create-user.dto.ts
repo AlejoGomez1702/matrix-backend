@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { IsBoolean, IsEmail, IsNotEmpty, IsString, Matches, MaxLength, MinLength } from "class-validator";
 
 export class CreateUserDto {
@@ -7,11 +8,7 @@ export class CreateUserDto {
     email: string;
 
     @IsString()
-    @MinLength(8)
-    @MaxLength(50)
-    @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-        message: 'The password must have an Uppercase, lowercase letter, and a number'
-    })
+    @MinLength(1)
     password: string;
 
     @IsString()
